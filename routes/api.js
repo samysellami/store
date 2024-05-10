@@ -1,8 +1,8 @@
-var express = require('express');
-var router = express.Router();
+var express = require('express')
+var router = express.Router()
 
-var user = require('./users');
-var product = require('./products');
+var user = require('./users')
+var product = require('./products')
 
 /* POST USER. */
 router.post(`/users/signup`, user.create)
@@ -10,15 +10,20 @@ router.post(`/users/signup`, user.create)
 /* GET USERS. */
 router.get('/users/', user.list)
 
-
-
 /* POST PRODUCT. */
 router.post(`/products`, product.create)
 
 /* GET PRODUCTS. */
 router.get('/products', product.list)
 
-/* GET PRODUCTS. */
-app.get(`/post/:id`, product.edit)
+/* GET PRODUCT. */
+router.get(`/products/:id`, product.get)
 
-module.exports = router;
+/* EDIT PRODUCT. */
+router.put(`/products/:id`, product.edit)
+module.exports = router
+
+/* DELETE PRODUCT. */
+router.delete(`/products/:id`, product.delete)
+
+module.exports = router
