@@ -2,12 +2,14 @@
 CREATE TABLE "User" (
     "id" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
     "email" TEXT NOT NULL,
-    "password" TEXT NOT NULL,
-    "name" TEXT
+    "hash" TEXT NOT NULL,
+    "salt" TEXT NOT NULL,
+    "name" TEXT,
+    "role" TEXT
 );
 
 -- CreateTable
-CREATE TABLE "Post" (
+CREATE TABLE "Product" (
     "id" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
     "createdAt" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" DATETIME NOT NULL,
@@ -22,4 +24,7 @@ CREATE TABLE "Post" (
 CREATE UNIQUE INDEX "User_email_key" ON "User"("email");
 
 -- CreateIndex
-CREATE UNIQUE INDEX "User_password_key" ON "User"("password");
+CREATE UNIQUE INDEX "User_hash_key" ON "User"("hash");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "User_salt_key" ON "User"("salt");

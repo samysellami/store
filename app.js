@@ -6,6 +6,7 @@ var logger = require('morgan')
 
 var indexRouter = require('./routes/index')
 var apiRouter = require('./routes/api')
+var session = require('express-session')
 
 var app = express()
 
@@ -18,6 +19,26 @@ app.use(express.json())
 app.use(express.urlencoded({ extended: false }))
 app.use(cookieParser())
 app.use(express.static(path.join(__dirname, 'public')))
+
+app.use(
+  session({
+    resave: false, // don't save session if unmodified
+    saveUninitialized: false, // don't create session until something stored
+    secret: 'shhhh, very secret',
+  })
+)
+
+// Session-persisted message middleware
+app.use(function (req, res, next) {
+  var err = req.session.error
+  var msg = req.session.success
+  delete req.session.error
+  delete req.session.success
+  res.locals.message = ''
+  if (err) res.locals.message = '<p class="msg error">' + err + '</p>'
+  if (msg) res.locals.message = '<p class="msg success">' + msg + '</p>'
+  next()
+})
 
 app.use('/', indexRouter)
 app.use('/api/', apiRouter)
@@ -38,10 +59,10 @@ app.use(function (err, req, res, next) {
   res.render('error')
 })
 
-// const server = app.listen(3000, () =>
-//   console.log(`
-// 🚀 Server ready at: http://localhost:3000
-// ⭐️ See sample requests: http://pris.ly/e/js/rest-express#3-using-the-rest-api`),
-// )
+const server = app.listen(3000, () =>
+  console.log(`
+🚀 Server ready at: http://localhost:3000
+⭐️ See sample requests: http://pris.ly/e/js/rest-express#3-using-the-rest-api`),
+)
 
 module.exports = app
