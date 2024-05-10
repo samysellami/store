@@ -50,7 +50,25 @@ exports.edit = async function (req, res) {
 
 /* GET PRODUCTS. */
 exports.list = async function (req, res) {
-  const result = await prisma.product.findMany()
+  const { category, orderBy } = req.query
+
+  const filter = category
+    ? {
+        OR: [
+          { category: { contains: category } },
+        ],
+      }
+    : {}
+
+  const result = await prisma.product.findMany({
+    where: {
+      ...filter,
+    },
+    orderBy: {
+      price: orderBy || undefined,
+    },
+  })
+
   res.json(result)
 }
 
