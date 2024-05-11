@@ -9,12 +9,12 @@ This repository is a **REST API** that shows how to implement a Store Product Ma
 Download this example:
 
 ```
-npx try-prisma@latest --template javascript/rest-express
+git clone https://github.com/samysellami/store.git
 ```
 
 Install npm dependencies:
 ```
-cd rest-express
+cd store
 npm install
 ```
 
@@ -85,3 +85,5 @@ You can access the REST API of the server using the following endpoints:
 
 - `/api/products/:id`: Delete a product by its `id`
 - `/api/users/:id`: Delete a user by its `id`
+
+Note: the postman collection of sample requests are attached to this repository
