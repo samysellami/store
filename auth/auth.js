@@ -15,8 +15,7 @@ exports.authenticate = async function authenticate(email, password, fn) {
   })
 
   if (!user) return fn(null, null)
-  // applying the hash against the pass / salt, if there is a match we
-  // found the user
+  // applying the hash against the pass / salt, if there is a match we found the user
   hash({ password: password, salt: user.salt }, function (err, pass, salt, hash) {
     if (err) return fn(err)
     if (hash === user.hash) return fn(null, user)
@@ -25,11 +24,11 @@ exports.authenticate = async function authenticate(email, password, fn) {
 }
 
 exports.isAdminUser = function restrict(req, res, next) {
-  if (req.session.user.role == 'admin') {
+  const role = req.session.user ? (req.session.user.role ? req.session.user.role : '') : ''
+  if (role == 'admin') {
     next()
   } else {
-    req.session.error = 'Access denied!'
+    req.session.error = 'Access denied! This endpoint is retricted to the admin user'
     res.status(403).json(`${req.session.error}`)
-    // res.redirect('/login')
   }
 }

@@ -7,6 +7,7 @@ var hash = require('pbkdf2-password')()
 exports.register = async function (req, res) {
   const { email, password, name } = req.body
   hash({ password: password }, async function (err, pass, salt, hash) {
+    const role = 'guest'
     if (err) {
       console.error('Error hashing password:', err)
       return res.status(500).json({ error: 'Internal server error' })
@@ -18,12 +19,14 @@ exports.register = async function (req, res) {
           hash,
           salt,
           name,
+          role
         },
       })
       res.status(201).json(`User ${name} successfully created`)
     } catch (error) {
-      console.error(`Error creating user ${name}:`, error)
-      res.status(500).json({ error: 'Internal server error' })
+      const errorMessage = `Error creating user ${name}`
+      console.error(errorMessage, error)
+      res.status(500).json({ error: errorMessage })
     }
   })
 }
@@ -35,19 +38,16 @@ exports.login = async function (req, res, next) {
     if (user) {
       // Regenerate session when signing in to prevent fixation
       req.session.regenerate(function () {
-        // Store the user's primary key in the session store to be retrieved,
-        // or in this case the entire user object
+        // Store user object in the session store
         req.session.user = user
         req.session.success =
           'Authenticated as ' + user.name
         res.status(200).json({ success: `${req.session.success}` })
-        // res.redirect('back');
       })
     } else {
-      req.session.error = 'Authentication failed, please check your ' + ' username and password.'
+      req.session.error = 'Authentication failed, please check your ' + 'username and password.'
       console.error('Error: ', `${req.session.error}`)
       res.status(500).json({ error: `${req.session.error}` })
-      // res.redirect('/login');
     }
   })
 }
@@ -55,7 +55,7 @@ exports.login = async function (req, res, next) {
 /* LOGOUT USER. */
 exports.logout = async function (req, res, next) {
   // destroy the user's session to log them out
-  const name = req.session.user.name
+  const name = req.session.user ? (req.session.user.name ? req.session.user.name: ""): ""
   req.session.destroy(function () {
     res.status(200).json(`User ${name} successfully logged out`)
   })
@@ -67,8 +67,9 @@ exports.list = async function (req, res) {
     const users = await prisma.user.findMany()
     res.status(200).json(users.map(({ id, email, name }) => ({ id, email, name })))
   } catch(error) {
-    console.error(`Error: cannot retreive the list of users:`, error)
-    res.status(500).json({ error: 'Internal server error' })    
+    const errorMessage = `Error: cannot retreive the list of users`
+    console.error(errorMessage, error)
+    res.status(500).json({ error: errorMessage })    
   }
 
 }
@@ -86,8 +87,9 @@ exports.getByEmail = async function (req, res) {
     const { id, name } = user
     res.status(200).json({id, email, name})
   } catch (error) {
-    console.error(`User with email ${email} does not exist in the database:`, error)
-    res.status(500).json({ error: 'Internal server error' })
+    const errorMessage = `Error: User with email ${email} does not exist in the database`
+    console.error(errorMessage, error)
+    res.status(500).json({ error: errorMessage })
   }
 }
 
@@ -100,8 +102,10 @@ exports.delete = async function (req, res) {
         id: Number(id),
       },
     })
-    res.status(200).json(`User with ID ${id} deleted from the database`)
+    res.status(200).json(`User with ID ${id} successfully deleted from the database`)
   } catch (error) {
-    res.json({ error: `User with ID ${id} does not exist in the database` })
+    const errorMessage = `Error: User with ID ${id} does not exist in the database`
+    console.error(errorMessage, error)
+    res.json({ error: errorMessage})
   }
 }

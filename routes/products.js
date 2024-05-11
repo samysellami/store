@@ -4,7 +4,7 @@ const prisma = new PrismaClient()
 /* POST PRODUCT. */
 exports.create = async function (req, res) {
   const { name, description, price, category, image } = req.body
-  try{
+  try {
     const result = await prisma.product.create({
       data: {
         name,
@@ -15,11 +15,11 @@ exports.create = async function (req, res) {
       },
     })
     res.status(201).json(result)
-  } catch(error) {
-    console.error('Error creating product:', error)
-    res.status(500).json({ error: 'Internal server error' })
+  } catch (error) {
+    const errorMessage = `Error creating product ${name}:`
+    console.error(errorMessage, error)
+    res.status(500).json({ error: errorMessage })
   }
-  
 }
 
 /* GET PRODUCT. */
@@ -31,13 +31,14 @@ exports.get = async function (req, res) {
       where: { id: Number(id) },
     })
     res.status(200).json(result)
-  } catch(error) {
-    console.error(`Product with ID ${id} does not exist in the database:`, error)
-    res.status(500).json({ error: `Product with ID ${id} does not exist in the database` })
+  } catch (error) {
+    const errorMessage = `Error: Product with ID ${id} does not exist in the database`
+    console.error(errorMessage, error)
+    res.status(500).json({ error: errorMessage })
   }
-
 }
 
+/* EDIT PRODUCT. */
 exports.edit = async function (req, res) {
   const { id } = req.params
   const { name, description, price, category, image } = req.body
@@ -56,8 +57,9 @@ exports.edit = async function (req, res) {
 
     res.json(result)
   } catch (error) {
-    console.error(`Product with ID ${id} does not exist in the database`, error)
-    res.json({ error: `Product with ID ${id} does not exist in the database` })
+    const errorMessage = `Error: Product with ID ${id} does not exist in the database`
+    console.error(errorMessage, error)
+    res.json({ error: errorMessage })
   }
 }
 
@@ -67,12 +69,10 @@ exports.list = async function (req, res) {
 
   const filter = category
     ? {
-        OR: [
-          { category: { contains: category } },
-        ],
+        OR: [{ category: { contains: category } }],
       }
     : {}
-  try{
+  try {
     const result = await prisma.product.findMany({
       where: {
         ...filter,
@@ -81,13 +81,12 @@ exports.list = async function (req, res) {
         price: orderBy || undefined,
       },
     })
-  } catch(error) {
-    console.error(`Error: cannot retreive the list of products`, error)
-    res.json({ error: `Error: cannot retreive the list of products` })
+    res.status(200).json(result)
+  } catch (error) {
+    const errorMessage = `Error: cannot retreive the list of products`
+    console.error(errorMessage, error)
+    res.json({ error: errorMessage })
   }
-
-
-  res.json(result)
 }
 
 /* DELETE PRODUCT. */
@@ -99,9 +98,10 @@ exports.delete = async function (req, res) {
         id: Number(id),
       },
     })
-    res.json(`Product with ID ${id} deleted from the database`)
+    res.json(`Product with ID ${id} successfully deleted from the database`)
   } catch (error) {
-    console.log(`Product with ID ${id} does not exist in the database`, error)
-    res.json({ error: `Product with ID ${id} does not exist in the database` })
+    const errorMessage = `Error: Product with ID ${id} does not exist in the database`
+    console.log(errorMessage, error)
+    res.json({ error: errorMessage })
   }
 }
