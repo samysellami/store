@@ -10,7 +10,6 @@ coverage
 
 # Benchmarking
 benchmarks/graphs
-.env
 
 prisma/.env
 prisma/migrations
