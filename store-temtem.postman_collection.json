@@ -13,7 +13,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"name\": \"product\",\n    \"description\": \"some description\",\n    \"price\": 0.5,\n    \"category\": \"some category\",\n    \"image\": \"some image\"\n}",
+					"raw": "{\n    \"name\": \"some product\",\n    \"description\": \"some description\",\n    \"price\": 1,\n    \"category\": \"some category\",\n    \"image\": \"some image\"\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -91,7 +91,7 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:3000/api/products/1",
+					"raw": "http://localhost:3000/api/products/7",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -100,7 +100,7 @@
 					"path": [
 						"api",
 						"products",
-						"1"
+						"7"
 					]
 				}
 			},
@@ -113,7 +113,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"name\": \"edited some name\",\n    \"description\": \"some description\",\n    \"price\": 1,\n    \"category\": \"some category\",\n    \"image\": \"some image\"\n}",
+					"raw": "{\n    \"name\": \"edited some product\",\n    \"description\": \"some description\",\n    \"price\": 1,\n    \"category\": \"some category\",\n    \"image\": \"some image\"\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -121,7 +121,7 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:3000/api/products/1",
+					"raw": "http://localhost:3000/api/products/4",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -130,7 +130,7 @@
 					"path": [
 						"api",
 						"products",
-						"1"
+						"4"
 					]
 				}
 			},
@@ -151,7 +151,7 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:3000/api/products/1",
+					"raw": "http://localhost:3000/api/products/7",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -160,7 +160,7 @@
 					"path": [
 						"api",
 						"products",
-						"1"
+						"7"
 					]
 				}
 			},
@@ -268,7 +268,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"email\": \"samy.sellami@hotmail.com\",\n    \"password\": \"secret\",\n    \"name\": \"Sami Sellami\"\n}",
+					"raw": "{\n    \"email\": \"guest@guest.com\",\n    \"password\": \"secret\",\n    \"name\": \"Guest User\"\n}",
 					"options": {
 						"raw": {
 							"language": "json"

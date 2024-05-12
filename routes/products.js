@@ -30,6 +30,9 @@ exports.get = async function (req, res) {
     const result = await prisma.product.findUnique({
       where: { id: Number(id) },
     })
+    if (result == null) {
+      throw new Error()
+    }
     res.status(200).json(result)
   } catch (error) {
     const errorMessage = `Error: Product with ID ${id} does not exist in the database`
@@ -98,7 +101,7 @@ exports.delete = async function (req, res) {
         id: Number(id),
       },
     })
-    res.json(`Product with ID ${id} successfully deleted from the database`)
+    res.json({ success: `Product with ID ${id} successfully deleted from the database` })
   } catch (error) {
     const errorMessage = `Error: Product with ID ${id} does not exist in the database`
     console.log(errorMessage, error)

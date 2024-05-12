@@ -19,10 +19,10 @@ exports.register = async function (req, res) {
           hash,
           salt,
           name,
-          role
+          role,
         },
       })
-      res.status(201).json(`User ${name} successfully created`)
+      res.status(201).json({ success: `User ${name} successfully created` })
     } catch (error) {
       const errorMessage = `Error creating user ${name}`
       console.error(errorMessage, error)
@@ -40,8 +40,7 @@ exports.login = async function (req, res, next) {
       req.session.regenerate(function () {
         // Store user object in the session store
         req.session.user = user
-        req.session.success =
-          'Authenticated as ' + user.name
+        req.session.success = 'Authenticated as ' + user.name
         res.status(200).json({ success: `${req.session.success}` })
       })
     } else {
@@ -55,23 +54,22 @@ exports.login = async function (req, res, next) {
 /* LOGOUT USER. */
 exports.logout = async function (req, res, next) {
   // destroy the user's session to log them out
-  const name = req.session.user ? (req.session.user.name ? req.session.user.name: ""): ""
+  const name = req.session.user ? (req.session.user.name ? req.session.user.name : '') : ''
   req.session.destroy(function () {
-    res.status(200).json(`User ${name} successfully logged out`)
+    res.status(200).json({ success: `User ${name} successfully logged out` })
   })
 }
 
 /* GET USERS. */
 exports.list = async function (req, res) {
-  try{
+  try {
     const users = await prisma.user.findMany()
     res.status(200).json(users.map(({ id, email, name }) => ({ id, email, name })))
-  } catch(error) {
+  } catch (error) {
     const errorMessage = `Error: cannot retreive the list of users`
     console.error(errorMessage, error)
-    res.status(500).json({ error: errorMessage })    
+    res.status(500).json({ error: errorMessage })
   }
-
 }
 
 /* GET USER BY EMAIL. */
@@ -85,7 +83,7 @@ exports.getByEmail = async function (req, res) {
       },
     })
     const { id, name } = user
-    res.status(200).json({id, email, name})
+    res.status(200).json({ id, email, name })
   } catch (error) {
     const errorMessage = `Error: User with email ${email} does not exist in the database`
     console.error(errorMessage, error)
@@ -102,10 +100,10 @@ exports.delete = async function (req, res) {
         id: Number(id),
       },
     })
-    res.status(200).json(`User with ID ${id} successfully deleted from the database`)
+    res.status(200).json({ success: `User with ID ${id} successfully deleted from the database}` })
   } catch (error) {
     const errorMessage = `Error: User with ID ${id} does not exist in the database`
     console.error(errorMessage, error)
-    res.json({ error: errorMessage})
+    res.json({ error: errorMessage })
   }
 }

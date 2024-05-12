@@ -1,4 +1,5 @@
 'use strict'
+
 const { PrismaClient } = require('@prisma/client')
 const prisma = new PrismaClient()
 
@@ -29,6 +30,6 @@ exports.isAdminUser = function restrict(req, res, next) {
     next()
   } else {
     req.session.error = 'Access denied! This endpoint is retricted to the admin user'
-    res.status(403).json(`${req.session.error}`)
+    res.status(403).json({ error: `${req.session.error}` })
   }
 }
