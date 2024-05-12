@@ -12,6 +12,7 @@ coverage
 benchmarks/graphs
 
 prisma/.env
+prisma/dev.db
 prisma/migrations
 
 
